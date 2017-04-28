@@ -28,6 +28,7 @@ class App extends React.Component {
         console.log('hello')
       }
     })  
+    forceUpdate();
   }
 
   render () {
@@ -36,6 +37,16 @@ class App extends React.Component {
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
     </div>)
+  }
+
+  componentDidMount () {
+    $.ajax({
+      type: 'GET',
+      url: '/repos',
+      contentType: 'application/json',
+      success: function () {console.log('GET request!')},
+      error: function (error) {console.log('HEYYY!', error)}
+    })
   }
 }
 
