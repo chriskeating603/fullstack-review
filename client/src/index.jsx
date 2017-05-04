@@ -16,19 +16,37 @@ class App extends React.Component {
   search (term) {
     console.log(`${term} was searched`);
     var obj = {term: term}
-    $.ajax ({
+    $.ajax({
       type: 'POST',
-      url: '/repos/import', 
+      url: '/repos/import',
       contentType: 'application/json',
       data: JSON.stringify(obj),
-      success: function () {
-        alert('SUCCESS!');
+      success: function (data) {
+        alert('SUCCESS')
+        console.log(data)
       },
-      error: function (error) {
-        console.log('hello')
+      error: function (err) {
+        alert('FAIL')
       }
-    })  
-    forceUpdate();
+    })
+  }
+
+  componentDidMount () {
+    console.log('componentDidMount is happening');
+    $.ajax({
+      type: 'GET',
+      url: '/repos',
+      contentType: 'application/json',
+      success: (data) => {
+        this.setState({
+          repos: data
+        })
+        alert('hurray!')
+      },
+      error: function (err) {
+        console.log('err', err)
+      }
+    })
   }
 
   render () {
@@ -37,16 +55,6 @@ class App extends React.Component {
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
     </div>)
-  }
-
-  componentDidMount () {
-    $.ajax({
-      type: 'GET',
-      url: '/repos',
-      contentType: 'application/json',
-      success: function () {console.log('GET request!')},
-      error: function (error) {console.log('HEYYY!', error)}
-    })
   }
 }
 
